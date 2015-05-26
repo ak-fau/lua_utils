@@ -10,6 +10,7 @@ for _,u in ipairs {
   "spy",
   "reload",
 } do
+  local ok, util
   ok, util = pcall(function() return require(u) end)
   if ok then
     print("  " .. u .. " module is loaded")
@@ -19,11 +20,13 @@ for _,u in ipairs {
   end
 end
 
-ok, init = pcall(function() return dofile("./init.lua") end)
+local ok, msg
+ok, msg = pcall(function() return dofile("./init.lua") end)
 if ok then
   print("Local init file is loaded")
+  if msg then init = msg end
 else
-  print("No local init file.")
+  print("Cannot load local init file:" .. msg)
 end
 
 print()
