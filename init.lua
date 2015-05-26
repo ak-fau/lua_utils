@@ -1,6 +1,19 @@
 -- Lua init script
 --
--- export LUA_INIT=@init.lua
+-- Copyright (c) 2015 Anton Kuzmin <anton.kuzmin@cs.fau.de>
+--
+-- This code is released under dual licenses:
+--   MIT public license (same as Lua, MIT-LICENSE.txt)
+-- and
+--   Community Research and Academic Programming License
+--   (CRAPL-LICENSE.txt)
+--
+-- To load it by default add the following lines to ~/.bashrc
+-- (or similar shell initialization file):
+--   export LUA_PATH="${HOME}/lua_utils/?.lua;;"
+--   export LUA_INIT=@${HOME}/lua_utils/init.lua
+--
+-- ...and do not try to run Lua from lua_utils/ dir ;-)
 
 print("Lua init script (" .. _VERSION .. ")")
 

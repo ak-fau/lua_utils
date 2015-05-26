@@ -1,5 +1,17 @@
 -- Lua utils:
 --   rshow() -- helper function to recursively print Lua data
+--
+--   Based on the code by Tobias S\"ulzenbr\"uck and Christoph Beckmann
+--   from Lua Programming Gems (ISBN 978-85-903798-4-3), pg. 29-32
+--   http://www.lua.org/gems/
+--
+-- Copyright (c) 2015 Anton Kuzmin <anton.kuzmin@cs.fau.de>
+--
+-- This code is released under dual licenses:
+--   MIT public license (same as Lua, MIT-LICENSE.txt)
+-- and
+--   Community Research and Academic Programming License
+--   (CRAPL-LICENSE.txt)
 
 local MAX_DEPTH = 5
 local MAX_STRING_LENGTH = 60
