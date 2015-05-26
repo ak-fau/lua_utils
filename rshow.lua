@@ -1,6 +1,29 @@
 -- Lua utils:
 --   rshow() -- helper function to recursively print Lua data
 
+local c
+
+if ansicolors then
+  local function repl(s)
+    local colors = {
+      key = "cyan",
+      hex = "yellow",
+      num = "red",
+      type = "bright",
+    }
+    r = colors[s]
+    if r then s = r end
+    return "%{" .. s .. "}"
+  end
+  c = function(str)
+    return ansicolors(string.gsub(str, "%%{(%a-)}", repl))
+  end
+else
+  c = function(str)
+    return string.gsub(str, "%%{%a-}", "")
+  end
+end
+
 local MAX_DEPTH = 5
 local MAX_STRING_LENGTH = 60
 
@@ -13,7 +36,7 @@ local function rshow(v, depth, key)
   local _spaces = ""
 
   if key ~= nil then
-    _prefix = "[" .. tostring(key) .. "] = "
+    _prefix = "[" .. c("%{key}" .. tostring(key)) .. "] = "
   end
 
   if depth == nil then
@@ -28,7 +51,7 @@ local function rshow(v, depth, key)
   else
 
     if type(v) == 'table' then
-      print(_spaces .. _prefix .. "(table)")
+      print(_spaces .. _prefix .. c("%{type}(table)"))
 
       local mt = getmetatable(v)
       if mt ~= nil then
@@ -48,9 +71,10 @@ local function rshow(v, depth, key)
 
     elseif type(v) == 'number' then
       if (v>=0) and (v<2^32) and (math.floor(v) == v) then
-        print(_spaces .. _prefix .. "(number) " .. tostring(v) .. "   0x" .. h32(v))
+        print(_spaces .. _prefix .. c("%{type}(number) %{num}" ..
+                                        tostring(v) .. "   %{hex}0x" .. h32(v)))
       else
-        print(_spaces .. _prefix .. "(number) " .. tostring(v))
+        print(_spaces .. _prefix .. c("%{type}(number) %{num}" .. tostring(v)))
       end
 
     elseif type(v) == 'boolean' then
