@@ -19,9 +19,14 @@ if ansicolors then
   local function repl(s)
     local colors = {
       key = "cyan",
-      hex = "yellow",
-      num = "red",
-      type = "bright",
+      hex = "dim",
+      num = "bright red",
+      str = "green",
+      bool= "white",
+      metatable = "bright magenta",
+      ["nil"] = "yellow",
+      ["type"] = "blue",
+      err = "underline",
     }
     r = colors[s]
     if r then s = r end
@@ -59,45 +64,49 @@ local function rshow(v, depth, key)
   end
 
   if depth > MAX_DEPTH then
-    print(_spaces .. _prefix .. "<MAX_DEPTH (" .. MAX_DEPTH .. ") is exceeded>")
+    print(_spaces .. _prefix .. c("%{err}<MAX_DEPTH (" .. MAX_DEPTH .. ") is exceeded>"))
   else
 
     if type(v) == 'table' then
-      print(_spaces .. _prefix .. c("%{type}(table)"))
+      print(_spaces .. _prefix .. c("%{type}(table)") .. c("%{hex}" .. string.sub(tostring(v), 7)))
 
       local mt = getmetatable(v)
       if mt ~= nil then
-        rshow(mt, depth, "_MT_")
+        rshow(mt, depth, "%{metatable}_MT_")
       end
 
       for tk, tv in pairs(v) do
         rshow(tv, depth, tk)
       end
 
-    elseif type(v) == 'function'
-        or type(v) == 'thread'
+    elseif type(v) == 'function' then
+      print(_spaces .. _prefix .. c("%{type}(function) ") .. c("%{hex}" .. string.sub(tostring(v), 11)))
+
+    elseif v == nil then
+      print(_spaces .. _prefix .. c("%{nil}nil"))
+
+    elseif type(v) == 'thread'
         or type(v) == 'userdata'
-        or      v  == nil
     then
       print(_spaces .. _prefix .. tostring(v))
 
     elseif type(v) == 'number' then
       if (v>=0) and (v<2^32) and (math.floor(v) == v) then
-        print(_spaces .. _prefix .. c("%{type}(number) %{num}" ..
-                                        tostring(v) .. "   %{hex}0x" .. h32(v)))
+        print(_spaces .. _prefix .. c("%{type}(number) %{num}" .. tostring(v)) ..
+                                    c("   %{hex}0x" .. h32(v)))
       else
         print(_spaces .. _prefix .. c("%{type}(number) %{num}" .. tostring(v)))
       end
 
     elseif type(v) == 'boolean' then
-      print(_spaces .. _prefix .. "(boolean) " .. tostring(v))
+      print(_spaces .. _prefix .. c("%{type}(boolean) %{bool}" .. tostring(v)))
 
     else -- string
       local len = #v
       if len > MAX_STRING_LENGTH then
         v = string.sub(v, 1, MAX_STRING_LENGTH-3) .. "..."
       end
-      print(_spaces .. _prefix .. "(string) len = " .. len .. " '" .. v .. "'")
+      print(_spaces .. _prefix .. c("%{type}(string)") .. " len = " .. c("%{num}" .. len) .. c(" %{str}'" .. v .. "'"))
     end
   end
 end
