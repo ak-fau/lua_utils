@@ -17,6 +17,9 @@ it is used internally by `show()` and `spy()`
 The function is based on the code by Tobias Sülzenbürck and Christoph Beckmann
 from  [Lua Programming Gems](http://www.lua.org/gems/), ISBN 978-85-903798-4-3), pg. 29-32
 
+## Screenshot
+
+![screenshot demonstrating init.lua file load and colorized output of the show() function](./color_show_table.png)
 
 ## License
 
