@@ -1,5 +1,13 @@
 -- Lua utils:
---   show() function to pretty-print Lua data
+--   show() function to pretty-print its arguments
+--
+-- Copyright (c) 2015 Anton Kuzmin <anton.kuzmin@cs.fau.de>
+--
+-- This code is released under dual licenses:
+--   MIT public license (same as Lua, MIT-LICENSE.txt)
+-- and
+--   Community Research and Academic Programming License
+--   (CRAPL-LICENSE.txt)
 
 local ok, rshow
 ok, rshow = pcall(function() return require "rshow" end)
