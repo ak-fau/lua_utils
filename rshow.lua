@@ -26,7 +26,8 @@ if ansicolors then
       metatable = "bright magenta",
       ["nil"] = "yellow",
       ["type"] = "blue",
-      err = "underline",
+      visited = "dim",
+      err = "dim",
     }
     r = colors[s]
     if r then s = r end
@@ -48,7 +49,8 @@ local function h32(n)
    return string.format("%08x", n)
 end
 
-local function rshow(v, depth, key)
+local function rshow(v, depth, key, visited)
+  visited = visited or {}
   local _prefix = ""
   local _spaces = ""
 
@@ -68,15 +70,20 @@ local function rshow(v, depth, key)
   else
 
     if type(v) == 'table' then
-      print(_spaces .. _prefix .. c("%{type}(table)") .. c("%{hex}" .. string.sub(tostring(v), 7)))
+      if visited[v] then
+        print(_spaces .. _prefix .. c("%{type}(table)") .. c("%{hex}" .. string.sub(tostring(v), 7)) .. c(" %{visited}<shown above>"))
+      else
+        visited[v] = true
+        print(_spaces .. _prefix .. c("%{type}(table)") .. c("%{hex}" .. string.sub(tostring(v), 7)))
 
-      local mt = getmetatable(v)
-      if mt ~= nil then
-        rshow(mt, depth, "%{metatable}_MT_")
-      end
+        local mt = getmetatable(v)
+        if mt ~= nil then
+          rshow(mt, depth, "%{metatable}_MT_", visited)
+        end
 
-      for tk, tv in pairs(v) do
-        rshow(tv, depth, tk)
+        for tk, tv in pairs(v) do
+          rshow(tv, depth, tk, visited)
+        end
       end
 
     elseif type(v) == 'function' then
