@@ -123,7 +123,7 @@ local function rshow(v, depth, key, visited)
         v = string.sub(v, 1, MAX_STRING_LENGTH-3) .. "..."
       end
       v = str_escape(v)
-      print(_spaces .. _prefix .. c("%{type}(string)") .. " len = " .. c("%{num}" .. len) .. c(" %{str}\"" .. v .. "\""))
+      print(_spaces .. _prefix .. c("%{type}(string)") .. " len = " .. c("%{num}" .. len) .. c(" \"%{str}" .. v) .. "\"")
     end
   end
 end
