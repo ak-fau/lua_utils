@@ -22,6 +22,7 @@ if ansicolors then
       hex = "dim",
       num = "bright red",
       str = "green",
+      cchr = "red",
       bool= "white",
       metatable = "bright magenta",
       ["nil"] = "yellow",
@@ -47,6 +48,14 @@ local MAX_STRING_LENGTH = 60
 
 local function h32(n)
    return string.format("%08x", n)
+end
+
+local function str_escape(s)
+  local r = string.gsub(s, "%c",
+                        function(c)
+                          return "%{cchr}\\x" .. string.format("%02x", string.byte(c)) .. "%{str}"
+                        end)
+  return string.gsub(r, "\"", "%%{cchr}\\\"%%{str}")
 end
 
 local function rshow(v, depth, key, visited)
@@ -113,7 +122,8 @@ local function rshow(v, depth, key, visited)
       if len > MAX_STRING_LENGTH then
         v = string.sub(v, 1, MAX_STRING_LENGTH-3) .. "..."
       end
-      print(_spaces .. _prefix .. c("%{type}(string)") .. " len = " .. c("%{num}" .. len) .. c(" %{str}'" .. v .. "'"))
+      v = str_escape(v)
+      print(_spaces .. _prefix .. c("%{type}(string)") .. " len = " .. c("%{num}" .. len) .. c(" %{str}\"" .. v .. "\""))
     end
   end
 end
